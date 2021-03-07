@@ -3,9 +3,9 @@ load 'plot'
 
 NB. Cross Product definition copied from:
 NB. https://code.jsoftware.com/wiki/Essays/Complete_Tensor
-CT=: C.!.2 @ (#:i.) @ $~
-ip   =: +/ .*
-cross=: [ ip CT@#@[ ip ]
+CT    =: C.!.2 @ (#:i.) @ $~
+ip    =: +/ .*
+cross =: [ ip CT@#@[ ip ]
 
 NB. Electric field
 EvalE=: 3 : 0
@@ -30,16 +30,14 @@ Boris=: 3 : 0
    'qom vx vy vz ex ey ez mx my mz dt' =. y
    vold =. (vx,vy,vz) [ ef =. (ex,ey,ez) [ bf =. (mx,my,mz)
 
-   T =. bf*qom*0.5*dt
-   Tsq =: +/*: T
-   S =. +: T % 1+Tsq
+   T =. bf*qom*0.5*dt                 NB.    T = q*B*dt/(2*m)
+   Tsq =: +/*: T                      NB.        |T|**2
+   S =. +: T % 1+Tsq                  NB.    S = 2*T/(1+|T|**2)
    
-   vminus     =. vold + ef*qom*dt*0.5 NB. v- = vold + q*E*dt/(2*m)
-   vm_cross_T =. vminus cross T       NB. v- X T
-   vprime     =. vminus + vm_cross_T  NB. v' = v- + v- X T
-   vp_cross_S =. vprime cross S       NB. v' X S
-   vplus      =. vminus + vp_cross_S  NB. v+ = v- + v' X S
-   vplus + ef*qom*dt*0.5              NB. vnew = v+ +q*E*dt/(2*m)
+   vminus =. vold   + ef*qom*dt*0.5   NB.   v- = vold + q*E*dt/(2*m)
+   vprime =. vminus + vminus cross T  NB.   v' = v-   + v- X T
+   vplus  =. vminus + vprime cross S  NB.   v+ = v-   + v' X S
+             vplus  + ef*qom*dt*0.5   NB. vnew = v+   + q*E*dt/(2*m)
 )
 
 updatepos =: 3 : 0 
@@ -59,9 +57,7 @@ for_ii. i.nt
 )
 NB. 
 NB. MAIN PROGRAM, THE ONLY HARD CODED THINGS
-NB. ABOVE ARE THE ELECTRIC FIELD AND MAGNETIC
-NB. FIELD FUNCTIONS. NEED TO FIND A WAY OF
-NB. PASSING FUNCTIONS AS ARGUMENTS.
+NB. ABOVE ARE THE E & B FUNCTIONS.
 NB. 
 'q m' =: 1 1
 'nt dt' =: 1000 0.01
