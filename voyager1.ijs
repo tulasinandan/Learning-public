@@ -22,14 +22,15 @@ inputfile=: '~/WorkSpace/jprojects/Voyager/voyager2_daily.csv'
 NB. Read yr(0), doy(1), dist(3), bmag(7), vsw(11), den(14) and Ti(15) columns
 NB. from the Voyager datafile
 vy =: readcolumns inputfile; 0 1 3 7 11 14 15
-
-yr   =: replacenan 0{"1 vy
-doy  =: replacenan 1{"1 vy
-dist =: replacenan 2{"1 vy
-bmag =: replacenan 3{"1 vy
-vsw  =: replacenan 4{"1 vy
-den  =: replacenan 5{"1 vy
-ti   =: replacenan 6{"1 vy
+cols=:'yr';'doy';'dist';'bmag';'vsw';'den';'ti'
+col =: 3 : ';vy {~"1 cols i.<y'
+yr   =: replacenan col 'yr'
+doy  =: replacenan col 'doy'
+dist =: replacenan col 'dist'
+bmag =: replacenan col 'bmag'
+vsw  =: replacenan col 'vsw'
+den  =: replacenan col 'den'
+ti   =: replacenan col 'ti'
 
 dy=:doy%365
 ydd=:yr+dy
